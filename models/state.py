@@ -8,12 +8,6 @@ class State(BaseModel):
     name = ""
 
     def __init__(self, *args, **kwargs):
-        print("Name args {}".format(args))
-        print("Name kwargs {}".format(kwargs))
-        super().__init__(self, args)
-        print("Aqui {}".format(self.id))
-        print("Name {}".format(kwargs))
-        if kwargs:
+        super().__init__(self, *args, **kwargs)
+        if 'name' in kwargs:
             self.name = kwargs['name']
-            print("In State: {}".format(self.name))
-

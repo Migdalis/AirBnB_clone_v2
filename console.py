@@ -4,6 +4,7 @@ import cmd
 import string
 import sys
 from venv import create
+import shlex
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -118,8 +119,8 @@ class HBNBCommand(cmd.Cmd):
 
 
     def do_create(self, args):
+        tokens = shlex.split(args)
         """ Create an object of any class"""
-        tokens = args.split()
         if not tokens:
             print("** class name missing **")
             return
@@ -127,14 +128,14 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
         else:
-
-            print("Before {}".format(tokens[1:]))
-            new_instance = HBNBCommand.classes[tokens[0]](tokens)
+            new_dict = {}
+            for arg in tokens[1:]:
+                key = arg.split('=')[0]
+                value = arg.split('=')[1]
+                new_dict[key] = value
+            new_instance = HBNBCommand.classes[tokens[0]](**new_dict)
             print(new_instance.id)
-        """new_instance = HBNBCommand.classes[args]()
         storage.save()
-        print(new_instance.id)
-        storage.save()"""
 
     def help_create(self):
         """ Help information for the create method """
