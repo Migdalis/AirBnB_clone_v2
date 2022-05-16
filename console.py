@@ -115,7 +115,7 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
-    def create_dict_params(args):
+    """def create_dict_params(args):
         dict_params = {}
         for arg in args:
             key = arg.split('=')[0]
@@ -124,7 +124,7 @@ class HBNBCommand(cmd.Cmd):
                 value.replace('_', ' ')
                 value = value.split('\"')                
                 dict_params[key] = value
-        return dict_params
+        return dict_params"""
 
     def do_create(self, args):
         """ Create an object of any class"""
@@ -137,10 +137,19 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
             return
         else:
-            new_dict = self.create_dict_params(tokens[1:])
+            dict_params = {}
+            for arg in tokens[1:]:
+                key = arg.split('=')[0]
+                value = arg.split('=')[1]
+                """if isinstance(value, str) and '\"' in value:
+                    value.replace('_', ' ')
+                    value = value.split('\"') """               
+                dict_params = eval('\'' + key + '\': ' + value)
+            print(dict_params)
+            """new_dict = self.create_dict_params(tokens[1:])"""
             """print(dict_params)"""
-            new_instance = HBNBCommand.classes[tokens[0]](new_dict)
-            print(new_instance.id)
+            """new_instance = HBNBCommand.classes[tokens[0]](new_dict)
+            print(new_instance.id)"""
         """new_instance = HBNBCommand.classes[args]()
         storage.save()
         print(new_instance.id)

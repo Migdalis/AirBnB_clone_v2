@@ -7,8 +7,8 @@ class State(BaseModel):
     """ State class """
     name = ""
 
-    def __init__(self, *args, **kwargs):
+    """def __init__(self, *args, **kwargs):
         if kwargs:
             self.name = kwargs['name']
-            print("In State: {}".format(self.name))
+            print("In State: {}".format(self.name))"""
 
