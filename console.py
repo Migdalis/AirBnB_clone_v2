@@ -4,6 +4,7 @@ import cmd
 import string
 import sys
 from venv import create
+import shlex
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -126,34 +127,36 @@ class HBNBCommand(cmd.Cmd):
                 dict_params[key] = value
         return dict_params"""
 
+
     def do_create(self, args):
         """ Create an object of any class"""
         tokens = args.split()
-        
+        print("Tokens: {}".format(tokens))
         if not tokens:
             print("** class name missing **")
             return
         elif tokens[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        else:
-            dict_params = {}
-            for arg in tokens[1:]:
-                key = arg.split('=')[0]
-                value = arg.split('=')[1]
-                """if isinstance(value, str) and '\"' in value:
-                    value.replace('_', ' ')
-                    value = value.split('\"') """               
-                dict_params = eval('\'' + key + '\': ' + value)
-            print(dict_params)
-            """new_dict = self.create_dict_params(tokens[1:])"""
-            """print(dict_params)"""
-            """new_instance = HBNBCommand.classes[tokens[0]](new_dict)
-            print(new_instance.id)"""
-        """new_instance = HBNBCommand.classes[args]()
-        storage.save()
+        new_dict = {}
+        for arg in tokens[1:]:
+            key = arg.split('=')[0]
+            value = arg.split('=')[1]
+            if value[0] == value[-1] == '"':
+                value = value.replace('"', '')
+                value = value.replace("_", " ")
+            else:
+                try:
+                    value = int(value)
+                except:
+                    try:
+                        value = float(value)
+                    except:
+                        continue
+            new_dict[key] = value
+        new_instance = HBNBCommand.classes[tokens[0]](**new_dict)
         print(new_instance.id)
-        storage.save()"""
+        storage.save()
 
     def help_create(self):
         """ Help information for the create method """

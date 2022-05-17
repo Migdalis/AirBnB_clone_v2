@@ -4,11 +4,9 @@ from models.base_model import BaseModel
 
 
 class State(BaseModel):
-    """ State class """
+    """ Class to handle a State """
     name = ""
 
-    """def __init__(self, *args, **kwargs):
-        if kwargs:
-            self.name = kwargs['name']
-            print("In State: {}".format(self.name))"""
-
+    def __init__(self, *args, **kwargs):
+        """Constructor to a new instance of state"""
+        super().__init__(self, *args, **kwargs)

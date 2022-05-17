@@ -9,3 +9,7 @@ class User(BaseModel):
     password = ''
     first_name = ''
     last_name = ''
+
+    def __init__(self, *args, **kwargs):
+        """Constructor to a new instance of user"""
+        super().__init__(self, *args, **kwargs)
