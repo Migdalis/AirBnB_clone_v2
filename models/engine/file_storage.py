@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """This module defines a class to manage file storage for hbnb clone"""
 import json
+import models
 from models.base_model import BaseModel
 from models.user import User
 from models.place import Place
@@ -59,5 +60,5 @@ class FileStorage:
         """Delete a object from __objects"""
         if obj is not None:
             key = obj.__class__.__name__ + '.' + obj.id
-            if key in self.__objects:
-                del self.__objects[key]
+            if key in FileStorage.__objects:
+                del FileStorage.__objects[key]
