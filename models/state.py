@@ -1,9 +1,12 @@
 #!/usr/bin/python3
 """ State Module for HBNB project """
+import models
+from os import getenv
 from hashlib import new
-from models.base_model import BaseModel
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import relationship, backref
+from models.base_model import BaseModel, Base
+from models.city import City
+from sqlalchemy import Column, String
+from sqlalchemy.orm import relationship
 
 
 class State(BaseModel, Base):
@@ -16,12 +19,14 @@ class State(BaseModel, Base):
         """Constructor to a new instance of state"""
         super().__init__(self, *args, **kwargs)
 
-    @property
-    def citties(self):
-        """Returns the list of City instances with state_id equals to the current State.id"""
-        new_list =[]
-        all_cities = models.storage.all(City)
-        for city in all_cities:
-            if city.state_ide == self.id:
-                new_list.append(city)
-        return new_list
+    if getenv('HBNB_TYPE_STORAGE') != 'db':
+        name = ""
+        @property
+        def citties(self):
+            """Returns the list of City instances with state_id equals to the current State.id"""
+            new_list =[]
+            all_cities = models.storage.all(City)
+            for city in all_cities.values():
+                if city.state_id == self.id:
+                    new_list.append(city)
+            return new_list

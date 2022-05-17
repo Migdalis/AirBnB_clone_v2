@@ -4,7 +4,6 @@ import cmd
 import string
 import sys
 from venv import create
-import shlex
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -19,7 +18,7 @@ class HBNBCommand(cmd.Cmd):
     """ Contains the functionality for the HBNB console"""
 
     # determines prompt for interactive/non-interactive modes
-    prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
+    prompt = '(hbnb) '
 
     classes = {
                'BaseModel': BaseModel, 'User': User, 'Place': Place,
@@ -32,11 +31,6 @@ class HBNBCommand(cmd.Cmd):
              'max_guest': int, 'price_by_night': int,
              'latitude': float, 'longitude': float
             }
-
-    def preloop(self):
-        """Prints if isatty is false"""
-        if not sys.__stdin__.isatty():
-            print('(hbnb)')
 
     def precmd(self, line):
         """Reformat command line for advanced command syntax.
@@ -89,12 +83,6 @@ class HBNBCommand(cmd.Cmd):
         finally:
             return line
 
-    def postcmd(self, stop, line):
-        """Prints if isatty is false"""
-        if not sys.__stdin__.isatty():
-            print('(hbnb) ', end='')
-        return stop
-
     def do_quit(self, command):
         """ Method to exit the HBNB console"""
         exit()
@@ -116,22 +104,9 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
-    """def create_dict_params(args):
-        dict_params = {}
-        for arg in args:
-            key = arg.split('=')[0]
-            value = arg.split('=')[1]
-            if isinstance(value, str) and '\"' in value:
-                value.replace('_', ' ')
-                value = value.split('\"')                
-                dict_params[key] = value
-        return dict_params"""
-
-
     def do_create(self, args):
         """ Create an object of any class"""
         tokens = args.split()
-        print("Tokens: {}".format(tokens))
         if not tokens:
             print("** class name missing **")
             return
@@ -156,6 +131,7 @@ class HBNBCommand(cmd.Cmd):
             new_dict[key] = value
         new_instance = HBNBCommand.classes[tokens[0]](**new_dict)
         print(new_instance.id)
+        storage.new(new_instance)
         storage.save()
 
     def help_create(self):
@@ -234,18 +210,18 @@ class HBNBCommand(cmd.Cmd):
         print_list = []
 
         if args:
-            args = args.split(' ')[0]  # remove possible trailing args
+            args = args.split()[0]  # remove possible trailing args
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            for k, v in storage._FileStorage__objects.items():
-                if k.split('.')[0] == args:
-                    print_list.append(str(v))
+            obj_dict = storage.all(HBNBCommand.classes[args])
         else:
-            for k, v in storage._FileStorage__objects.items():
-                print_list.append(str(v))
-
-        print(print_list)
+            obj_dict = storage.all()
+        for key in obj_dict:
+            print_list.append(str(obj_dict[key]))
+        print("[", end="")
+        print(", ".join(print_list), end="")
+        print("]")
 
     def help_all(self):
         """ Help information for the all command """
