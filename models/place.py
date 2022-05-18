@@ -10,7 +10,7 @@ from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship
 
 
-table_place_amenity = Table("place_amenity", Base.metadata,
+place_amenity = Table("place_amenity", Base.metadata,
                       Column("place_id", String(60), ForeignKey("places.id"),
                              primary_key=True, nullable=False),
                       Column("amenity_id", String(60), ForeignKey("amenities.id"),
@@ -60,7 +60,7 @@ class Place(BaseModel, Base):
             return new_list
 
         @amenities.setter
-        def amenities(self, amenity=None):
+        def amenities(self, amenity):
             """Setter method for add an Amenity.id"""
             if type(amenity) == Amenity:
                 self.amenity_ids.append(amenity.id)
