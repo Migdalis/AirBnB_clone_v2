@@ -13,9 +13,10 @@ from sqlalchemy.orm import relationship
 place_amenity = Table("place_amenity", Base.metadata,
                       Column("place_id", String(60), ForeignKey("places.id"),
                              primary_key=True, nullable=False),
-                      Column("amenity_id", String(60), ForeignKey("amenities.id"),
-                             primary_key=True, nullable=False)
-                )
+                      Column("amenity_id", String(60), ForeignKey(
+                          "amenities.id"), primary_key=True, nullable=False)
+                      )
+
 
 class Place(BaseModel, Base):
     """ A place to stay """
@@ -30,8 +31,10 @@ class Place(BaseModel, Base):
     price_by_night = Column(Integer, default=0, nullable=False)
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
-    reviews = relationship("Review", backref="place", cascade="delete")
-    amenities = relationship("Amenity", secondary="place_amenity", viewonly=True)
+    reviews = relationship("Review", backref="place",
+                           cascade="delete")
+    amenities = relationship("Amenity", secondary="place_amenity",
+                             viewonly=True)
     amenity_ids = []
 
     def __init__(self, *args, **kwargs):
@@ -41,8 +44,9 @@ class Place(BaseModel, Base):
     if getenv('HBNB_TYPE_STORAGE') != 'db':
         @property
         def reviews(self):
-            """Returns the list of Review instances with place_id equals to the current Place.id"""
-            new_list =[]
+            """Returns the list of Review instances with place_id
+            equals to the current Place.id"""
+            new_list = []
             all_reviews = models.storage.all(Review)
             for rvw in all_reviews.values():
                 if rvw.place_id == self.id:
@@ -52,7 +56,7 @@ class Place(BaseModel, Base):
         @property
         def amenities(self):
             """Returns the list of Amenity instances linked to the Place"""
-            new_list =[]
+            new_list = []
             all_amenities = models.storage.all(Amenity)
             for amnt in all_amenities.values():
                 if amnt.id in self.amenity_ids:

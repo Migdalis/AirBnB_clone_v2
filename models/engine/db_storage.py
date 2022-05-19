@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-"""This module defines a class to manage DB storage for hbnb clone using sqlAlchemy"""
+"""This module defines a class to manage DB storage
+for hbnb clone using sqlAlchemy"""
 import models
 from os import getenv
 from sqlalchemy import create_engine
@@ -17,7 +18,7 @@ class DBStorage:
     """Class to manage storage of models in database"""
     __engine = None
     __session = None
-    
+
     classes = {
                'User': User, 'Place': Place,
                'State': State, 'City': City, 'Amenity': Amenity,
@@ -34,7 +35,7 @@ class DBStorage:
         ), pool_pre_ping=True)
         Session = sessionmaker(bind=self.__engine)
         self.__session = Session()
-        
+
         if getenv('HBNB_ENV') == 'test':
             Base.metadata.drop_all(self.__engine)
 
@@ -50,8 +51,8 @@ class DBStorage:
         else:
             all_objs = self.__session.query(cls).all()
             for obj in all_objs:
-                    key = obj.to_dict()['__class__'] + '.' + obj.id
-                    new_dict[key] = obj
+                key = obj.to_dict()['__class__'] + '.' + obj.id
+                new_dict[key] = obj
         return new_dict
 
     def new(self, obj):

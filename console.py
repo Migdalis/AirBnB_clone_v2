@@ -123,10 +123,10 @@ class HBNBCommand(cmd.Cmd):
             else:
                 try:
                     value = int(value)
-                except:
+                except Exception:
                     try:
                         value = float(value)
-                    except:
+                    except Exception:
                         continue
             new_dict[key] = value
         new_instance = HBNBCommand.classes[tokens[0]](**new_dict)

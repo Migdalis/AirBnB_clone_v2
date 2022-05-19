@@ -11,7 +11,8 @@ class Amenity(BaseModel, Base):
     """Class to handle a amenity"""
     __tablename__ = "amenities"
     name = Column(String(128), nullable=False)
-    place_amenities = relationship("Place", secondary="place_amenity", viewonly=False)
+    place_amenities = relationship("Place", secondary="place_amenity",
+                                   viewonly=False)
 
     def __init__(self, *args, **kwargs):
         """Constructor to a new instance of amenity"""
