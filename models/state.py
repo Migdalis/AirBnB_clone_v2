@@ -11,18 +11,15 @@ from sqlalchemy.orm import relationship
 
 class State(BaseModel, Base):
     """ Class to handle a State """
-    if models.storage_t == 'db':
-        __tablename__ = "states"
-        name = Column(String(128), nullable=False)
-        cities = relationship("City", backref="state")
-    else:
-        name = ""
+    __tablename__ = "states"
+    name = Column(String(128), nullable=False)
+    cities = relationship("City", backref="state")
 
     def __init__(self, *args, **kwargs):
         """Constructor to a new instance of state"""
         super().__init__(self, *args, **kwargs)
 
-    if models.storage_t != 'db':
+    if getenv('HBNB_TYPE_STORAGE') != 'db':
         @property
         def citties(self):
             """Returns the list of City instances with
