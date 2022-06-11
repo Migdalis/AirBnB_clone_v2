@@ -19,9 +19,9 @@ class State(BaseModel, Base):
         """Constructor to a new instance of state"""
         super().__init__(self, *args, **kwargs)
 
-    if models.storage_t != 'db':
+    if getenv('HBNB_TYPE_STORAGE') != 'db':
         @property
-        def citties(self):
+        def cities(self):
             """Returns the list of City instances with
             state_id equals to the current State.id"""
             new_list = []
